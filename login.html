@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        background-color: rgb(167, 167, 167);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .form-box {
+        width: 300px;
+        padding: 45px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      input,
+      button {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+      }
+
+      button {
+        background-color: #d26f19;
+        font-weight: bold;
+        color: white;
+      }
+
+      button:hover {
+        background-color: #c06815;
+      }
+
+      a {
+        color: #d26f19;
+      }
+
+      .signup-toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4caf50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-box">
+      <h2>Welcome Back!</h2>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <label for="rememberme">Remember Me</label>
+      <input type="checkbox" name="rememberme" id="rememberme" />
+
+      <button onclick="login()">Login</button>
+
+      <a href="./signup.html">Create New Account</a>
+    </div>
+    <div class="signup-toast">
+      <h3>Account created successfully.</h3>
+      <h4>You can now log in.</h4>
+    </div>
+  </body>
+
+  <script>
+    window.onload = () => {
+      document.getElementById("username").focus();
+      if (localStorage.getItem("isLoggedIN") === "true") {
+        window.location.href = "welcome.html";
+      }
+
+      const savedUsername = getCookie("username");
+      if (savedUsername) {
+        document.getElementById("username").value = savedUsername;
+        document.getElementById("rememberme").checked = true;
+      }
+    };
+
+    const username = document.getElementById("username").value.trim();
+
+    function login() {
+      const password = document.getElementById("password").value.trim();
+      const username = document.getElementById("username").value.trim();
+
+      if (username === "" && password === "") {
+        alert("Please fill all fields.");
+        return;
+      }
+
+      const user = {
+        username: username,
+        password: btoa(password),
+      };
+
+      const userData = JSON.parse(localStorage.getItem(username));
+
+      if (userData && userData.password === user.password) {
+        const rememberMe = document.getElementById("rememberme").checked;
+        if (rememberMe) {
+          setCookie("username", user.username, 7); // Set cookie for 7 days
+        } else {
+          setCookie("username", "", -1); // Delete cookie
+        }
+
+        localStorage.setItem("isLoggedIN", "true");
+        localStorage.setItem("CurrentUser", user.username);
+        document.querySelector(".signup-toast").style.display = "block";
+        setTimeout(() => {
+          window.location.href = "welcome.html";
+        }, 2000);
+      } else if (!userData) {
+        alert("User does not exist. Please sign up.");
+      } else if (userData.password !== user.password) {
+        alert("Incorrect password. Please try again.");
+      }
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+      const expires = new Date(
+        Date.now() + exdays * 24 * 60 * 60 * 1000
+      ).toUTCString();
+
+      document.cookie = `${cname}=${encodeURIComponent(
+        cvalue
+      )}; expires=${expires}; path=/`;
+    }
+
+    function getCookie(name) {
+      return document.cookie.split(": ").reduce((acc, cookie) => {
+        const [key, value] = cookie.split("=");
+        if (key.trim() === name) {
+          return decodeURIComponent(value);
+        } else {
+          return acc;
+        }
+      }, "");
+    }
+  </script>
+</html>

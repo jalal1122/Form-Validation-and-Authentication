@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      h1 {
+        color: limegreen;
+        font-size: 2.5rem;
+        border-right: 5px solid limegreen;
+        width: 58%;
+        white-space: nowrap;
+        overflow: hidden;
+        animation: typing 2s steps(20), blink-caret 0.4s step-end infinite alternate;
+      }
+
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+      }
+
+      @keyframes blink-caret {
+        50% {
+          border-color: transparent;
+        }
+      }
+
+      body::selection {
+        background-color: limegreen;
+        color: white;
+      }
+
+      button {
+        background-color: limegreen;
+        font-weight: bold;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: bold;
+        border: none;
+      }
+
+      button:hover {
+        background-color: rgb(26, 139, 26);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Welcome back,</h1>
+    <button onclick="logout()">Logout</button>
+  </body>
+  <script>
+    window.onload = () => {
+      if (
+        localStorage.getItem("isLoggedIN") === "false"
+      ) {
+        window.location.href = "login.html";
+      }
+      const username = localStorage.getItem("CurrentUser");
+      document.querySelector("h1").textContent = "Welcome back, " + username;
+
+      console.log(username);
+    };
+
+    function logout() {
+      localStorage.removeItem("CurrentUser");
+      localStorage.setItem("isLoggedIN", false);
+      window.location.href = "login.html";
+    }
+  </script>
+</html>
