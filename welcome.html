@@ -18,10 +18,11 @@
         color: limegreen;
         font-size: 2.5rem;
         border-right: 5px solid limegreen;
-        width: 58%;
+        width: 100%;
         white-space: nowrap;
         overflow: hidden;
-        animation: typing 2s steps(20), blink-caret 0.4s step-end infinite alternate;
+        animation: typing 2s steps(20),
+          blink-caret 0.4s step-end infinite alternate;
       }
 
       @keyframes typing {
@@ -54,17 +55,25 @@
       button:hover {
         background-color: rgb(26, 139, 26);
       }
+
+      body{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh; 
+      }
     </style>
   </head>
   <body>
-    <h1>Welcome back,</h1>
+    <div>
+      <h1>Welcome back,</h1>
+    </div>
     <button onclick="logout()">Logout</button>
   </body>
   <script>
     window.onload = () => {
-      if (
-        localStorage.getItem("isLoggedIN") === "false"
-      ) {
+      if (localStorage.getItem("isLoggedIN") === "false") {
         window.location.href = "login.html";
       }
       const username = localStorage.getItem("CurrentUser");
